@@ -116,7 +116,7 @@ static void enc28j60_writePhy(uint8_t addres, uint16_t data)
 {
 	enc28j60_writeRegByte(MIREGADR, addres);
 	enc28j60_writeRegByte(MIWR, data);
-	while(enc28j60_readRegByte(MISTAT) & MISTAT_BUSY); //while(!(enc28j60_readRegByte(MISTAT) & MISTAT_BUSY));
+	while(enc28j60_readRegByte(MISTAT) & MISTAT_BUSY); 
 }
 
 void enc28j60_ini(void) 
