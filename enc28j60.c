@@ -125,7 +125,7 @@ void enc28j60_ini(void)
 	enc28j60_writeOp(ENC28J60_SOFT_RESET,0,ENC28J60_SOFT_RESET);
 	_delay_ms(2);
 	
-	while(!enc28j60_readOp(ENC28J60_READ_CTRL_REG, ESTAT) & ESTAT_CLKRDY); //while(!enc28j60_readOp(ENC28J60_READ_CTRL_REG, ESTAT) & ESTAT_CLKRDY)
+	while(!enc28j60_readOp(ENC28J60_READ_CTRL_REG, ESTAT) & ESTAT_CLKRDY); 
  
 	//Настраиваем буферы
 	enc28j60_writeReg(ERXST, RXSTART_INIT);
