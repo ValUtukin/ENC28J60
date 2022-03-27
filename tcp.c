@@ -176,9 +176,9 @@ uint8_t tcp_send(uint32_t ip_addr, uint16_t port, uint8_t op)
 		//Если пришло "Hello!!!", то отправим ответ
 		if (!strcmp((char*)tcp_pkt->data,"Temp"))
 		{
-			unsigned int tt = 0;//Температура
+			float tt = 0;//Температура
 			tt = converttemp(dt_check());//измеряем температуру
-			sprintf(str1, "%d\r\n", tt);
+			sprintf(str1, "%f\r\n", tt);
 			//strcpy((char*)tcp_pkt->data,"Hello to TCP Client!!!\r\n");
 			strcpy((char*)tcp_pkt->data,(uint8_t*)str1);
 			tcp_pkt->fl = TCP_ACK|TCP_PSH;
