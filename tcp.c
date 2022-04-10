@@ -173,7 +173,7 @@ uint8_t tcp_send(uint32_t ip_addr, uint16_t port, uint8_t op)
 		len+=sizeof(enc28j60_frame_ptr);
 		enc28j60_packetSend((void*)frame,len);
 		
-		//Если пришло "Hello!!!", то отправим ответ
+		//Если пришло "Temp", то отправим показания датчика температуры
 		if (!strcmp((char*)tcp_pkt->data,"Temp"))
 		{
 			float tt = 0;//Температура
