@@ -3,6 +3,8 @@
 extern char str1[60];
 extern uint8_t net_buf[ENC28J60_MAXFRAME];
 extern uint8_t macaddr[6];
+int tt = 0;
+int tt1, tt2;
 
 uint8_t tcp_read(enc28j60_frame_ptr *frame, uint16_t len)
 {
@@ -174,12 +176,12 @@ uint8_t tcp_send(uint32_t ip_addr, uint16_t port, uint8_t op)
 		enc28j60_packetSend((void*)frame,len);
 		
 		//Если пришло "Temp", то отправим показания датчика температуры
-		if (!strcmp((char*)tcp_pkt->data,"Temp"))
+		if (!strcmp((char*)tcp_pkt->data,"Get Temp"))
 		{
-			float tt = 0;//Температура
-			tt = converttemp(dt_check());//измеряем температуру
-			sprintf(str1, "%f\r\n", tt);
-			//strcpy((char*)tcp_pkt->data,"Hello to TCP Client!!!\r\n");
+			tt1 = tt/16.0;
+			tt2 = abs((tt/16.0)*10 - 10*tt1);
+			
+			sprintf(str1,"%d.%d\r\n", tt1, tt2);
 			strcpy((char*)tcp_pkt->data,(uint8_t*)str1);
 			tcp_pkt->fl = TCP_ACK|TCP_PSH;
 			
@@ -198,6 +200,25 @@ uint8_t tcp_send(uint32_t ip_addr, uint16_t port, uint8_t op)
 			ip_pkt->cs = checksum((void*)ip_pkt,sizeof(ip_pkt_ptr),0);
 			len+=sizeof(enc28j60_frame_ptr);
 			enc28j60_packetSend((void*)frame,len);
+		}
+		if (!strcmp((char*)tcp_pkt->data,"Make Temp"))//Команда измерения температуры
+		{	
+			tcp_pkt->fl = TCP_ACK|TCP_PSH;
+			strcpy((char*)tcp_pkt->data,"Measuring temperature...\r\n");
+			len = sizeof(tcp_pkt_ptr);
+			tcp_pkt->len_hdr = len << 2;
+			len+=strlen((char*)tcp_pkt->data);
+			tcp_pkt->cs = 0;
+			tcp_pkt->cs=checksum((uint8_t*)tcp_pkt-8, len+8, 2);
+			//Заполним заголовок пакета IP
+			len+=sizeof(ip_pkt_ptr);
+			ip_pkt->len=be16toword(len);
+			ip_pkt->cs = 0;
+			ip_pkt->cs = checksum((void*)ip_pkt,sizeof(ip_pkt_ptr),0);
+			len+=sizeof(enc28j60_frame_ptr);
+			enc28j60_packetSend((void*)frame,len);
+			tt = dt_check();//измеряем температуру
+			sei();
 		}
 	}
 	return res;

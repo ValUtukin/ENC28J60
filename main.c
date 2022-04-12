@@ -56,6 +56,10 @@ int main(void)
 		//readREG();
 		//_delay_ms(20);
 		//PORTC &= ~(1<<5);
+		PORTC |= (1<<4);
+		_delay_ms(5000);
+		PORTC &= ~(1<<4);
+		_delay_ms(1000);
 	}
 }
 

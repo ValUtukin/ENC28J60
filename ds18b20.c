@@ -98,10 +98,13 @@ int dt_check(void) //функция преобразования показаний датчика в температуру
 	return tt;
 }
 
-float converttemp (int tt)//преобразование температуры в единицы
+char converttemp(int tt)//преобразование температуры в единицы
 {
-	float result = 0x00;
-	result = (float) tt / 16.0f;
+	char temperature[5] = {};
+	int tt1 = (float) tt / 16.0f;
+	int tt2 = (tt - tt1*16);
+	sprintf(temperature,"%d%d\r\n", tt1, tt2);
 	sei();
-	return result;
+	
+	return temperature;
 }

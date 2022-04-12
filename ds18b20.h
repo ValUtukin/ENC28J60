@@ -18,6 +18,6 @@ void dt_sendbyte(unsigned char bt);
 char dt_readbit(void);
 unsigned char dt_readbyte(void);
 int dt_check(void);
-float converttemp (int tt);
+char converttemp (int tt);
 
 #endif /* DS18B20_H_ */
